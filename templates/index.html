@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://source.unsplash.com/1600x900/?nature,abstract') no-repeat center center fixed;
+            background-size: cover;
+            color: black;
+            background-color: #ff6666;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fcaeae;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(255, 116, 2, 0.858);
+            opacity: 1;
+        }
+
+        h1 {
+            font-weight: bold;
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            padding: 20px;
+        }
+
+        .bio-card {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e9f7ef;
+            border: 1px solid #d4edda;
+            border-radius: 10px;
+        }
+
+        .bio-card h2 {
+            margin-bottom: 15px;
+            font-size: 1.25rem;
+            color: #333;
+        }
+
+        .bio-card img {
+            float: left;
+            margin-right: 15px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        label {
+            color: #333;
+        }
+
+        .btn-dark {
+            background-color: #ff6666;
+            border: none;
+        }
+
+        .btn-dark:hover {
+            background-color: #fcaeae;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Bio Generator</h1>
+        <div class="form-container">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="career">Career:</label>
+                    <input type="text" class="form-control" id="career" name="career" required>
+                </div>
+                <div class="form-group">
+                    <label for="personality">Personality:</label>
+                    <input type="text" class="form-control" id="personality" name="personality" required>
+                </div>
+                <div class="form-group">
+                    <label for="interests">Interests:</label>
+                    <input type="text" class="form-control" id="interests" name="interests" required>
+                </div>
+                <div class="form-group">
+                    <label for="relationship_goals">Relationship Goals:</label>
+                    <input type="text" class="form-control" id="relationship_goals" name="relationship_goals" required>
+                </div>
+                <button type="submit" class="btn btn-dark btn-block">Generate Bio</button>
+            </form>
+        </div>
+
+        {% if bio %}
+        <div class="bio-card">
+            <h2>Generated Bio:</h2>
+            <p>{{ bio }}</p>
+        </div>
+        {% endif %}
+
+        <div class="footer">
+            <p>&copy; 2024 Bio Generator | All rights reserved.</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
