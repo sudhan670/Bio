@@ -19,7 +19,7 @@ def generate_bio(career, personality, interests, relationship_goals):
         model = genai.GenerativeModel("gemini-1.5-flash")
 
         prompt = f"""
-        Generate a short, engaging dating bio.
+        Generate a short dating bio:
         Career: {career}
         Personality: {personality}
         Interests: {interests}
@@ -28,15 +28,16 @@ def generate_bio(career, personality, interests, relationship_goals):
 
         response = model.generate_content(prompt)
 
-        # Safe response handling
+        print("FULL RESPONSE:", response)
+
         if response and hasattr(response, "text") and response.text:
             return response.text.strip()
         else:
-            return "⚠️ No bio generated. Try again."
+            return " No response from AI."
 
     except Exception as e:
-        print("🔥 ERROR:", str(e))  # Visible in Render logs
-        return "❌ Something went wrong while generating bio."
+        print(" REAL ERROR:", str(e)) 
+        return f"ERROR: {str(e)}"
 
 
 @app.route("/", methods=["GET", "POST"])
