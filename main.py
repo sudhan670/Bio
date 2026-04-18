@@ -16,7 +16,7 @@ genai.configure(api_key=API_KEY)
 # Bio generation function
 def generate_bio(career, personality, interests, relationship_goals):
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
 
         prompt = f"""
         Generate a short dating bio:
