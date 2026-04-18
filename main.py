@@ -1,36 +1,67 @@
 from flask import Flask, render_template, request
 import os
 import google.generativeai as genai
+
 app = Flask(__name__)
 
+# Configure API key safely
+API_KEY = os.getenv("GEMINI_API_KEY")
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+if not API_KEY:
+    print("❌ ERROR: GEMINI_API_KEY is not set!")
+
+genai.configure(api_key=API_KEY)
 
 
-# Define the bio generation function using the Gemini API
+# Bio generation function
 def generate_bio(career, personality, interests, relationship_goals):
-    model = genai.GenerativeModel("gemini-1.5-flash")  # Or "gemini-pro"
+    try:
+        model = genai.GenerativeModel("gemini-1.5-flash")
 
-    prompt = f"Generate a bio for a {personality} {career} who enjoys {interests} and is looking for {relationship_goals}."
+        prompt = f"""
+        Generate a short, engaging dating bio.
+        Career: {career}
+        Personality: {personality}
+        Interests: {interests}
+        Relationship Goals: {relationship_goals}
+        """
 
-    response = model.generate_content(prompt)
+        response = model.generate_content(prompt)
 
-    generated_bio = response.text.strip()
-    return generated_bio
+        # Safe response handling
+        if response and hasattr(response, "text") and response.text:
+            return response.text.strip()
+        else:
+            return "⚠️ No bio generated. Try again."
+
+    except Exception as e:
+        print("🔥 ERROR:", str(e))  # Visible in Render logs
+        return "❌ Something went wrong while generating bio."
 
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    bio = None  # Initialize bio as None by default
-    if request.method == "POST":
-        career = request.form["career"]
-        personality = request.form["personality"]
-        interests = request.form["interests"]
-        relationship_goals = request.form["relationship_goals"]
+    bio = None
 
-        # Call the function to generate the bio
-        bio = generate_bio(career, personality, interests, relationship_goals)
-    return render_template("index.html", bio=str(bio))
+    if request.method == "POST":
+        try:
+            career = request.form.get("career", "")
+            personality = request.form.get("personality", "")
+            interests = request.form.get("interests", "")
+            relationship_goals = request.form.get("relationship_goals", "")
+
+            # Validate inputs
+            if not all([career, personality, interests, relationship_goals]):
+                bio = "⚠️ Please fill all fields."
+            else:
+                bio = generate_bio(career, personality, interests, relationship_goals)
+
+        except Exception as e:
+            print("🔥 FORM ERROR:", str(e))
+            bio = "❌ Error processing your request."
+
+    return render_template("index.html", bio=bio)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
